@@ -5,12 +5,14 @@ export class LogIn {
   readonly userNameInput: Locator;
   readonly passwordInput: Locator;
   readonly signInButton: Locator;
+  readonly pageTitle: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.userNameInput = page.getByRole("textbox", { name: "Username" });
     this.passwordInput = page.getByRole("textbox", { name: "Password" });
     this.signInButton = page.getByRole("button", { name: "Sign in" });
+    this.pageTitle = page.getByRole("heading", { name: "BOL Documents" });
   }
 
   async login(username: any, password: any) {
