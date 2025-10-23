@@ -5,9 +5,8 @@ test.describe("BOL Table", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("");
   });
-  test("TBD", async ({ page }) => {
-    await expect(
-      page.getByRole("heading", { name: "BOL Documents" })
-    ).toBeVisible();
+  test("Verify initial state of the table", async ({ page, table }) => {
+    //BOLs in status pending validation are prefiltered in ascending order
+    await expect(table.pageTitle).toBeVisible();
   });
 });
