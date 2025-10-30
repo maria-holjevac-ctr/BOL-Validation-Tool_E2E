@@ -8,7 +8,7 @@ test.describe("Illegible BOL details page", () => {
     await generalDetails.removeStatusFilter.click();
     await illegibleBOL.tableRow.click();
   });
-
+  // Details of Illegible BOL are initialy presented in View mode, with Edit button in the top right corner
   test("Verify UI of whole Illegible BOL details page", async ({
     page,
     illegibleBOL,

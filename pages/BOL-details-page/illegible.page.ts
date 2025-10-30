@@ -6,6 +6,8 @@ export class IllegibleBOL {
 
   constructor(page: Page) {
     this.page = page;
-    this.tableRow = page.getByRole("cell", { name: "Validation failed" });
+    this.tableRow = page
+      .getByRole("cell", { name: "Validation failed" })
+      .first();
   }
 }

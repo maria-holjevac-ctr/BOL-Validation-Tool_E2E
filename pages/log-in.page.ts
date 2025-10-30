@@ -17,7 +17,9 @@ export class LogIn {
     this.passwordInput = page.getByRole("textbox", { name: "Password" });
     this.showHideBtn = page.locator("button").first();
     this.signInButton = page.getByRole("button", { name: "Sign in" });
-    this.toastMessage = page.locator("div.mantine-Notifications-notification");
+    this.toastMessage = page
+      .locator("div.mantine-Notifications-notification")
+      .first();
     this.pageTitle = page.getByRole("heading", { name: "BOL Documents" });
   }
 

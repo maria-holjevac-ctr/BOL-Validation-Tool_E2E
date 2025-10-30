@@ -8,7 +8,7 @@ test.describe("Valid BOL details page", () => {
     await generalDetails.removeStatusFilter.click();
     await validBOL.tableRow.click();
   });
-
+  // Details of Valid BOL are initialy presented in View mode, with Edit button in the top right corner
   test("Verify UI of whole Valid BOL details page", async ({
     page,
     generalDetails,

@@ -6,6 +6,6 @@ export class ValidBOL {
 
   constructor(page: Page) {
     this.page = page;
-    this.tableRow = page.getByRole("cell", { name: "Validated" });
+    this.tableRow = page.getByRole("cell", { name: "Validated" }).first();
   }
 }
