@@ -6,6 +6,7 @@ import { IllegibleBOL } from "../pages/BOL-details-page/illegible.page";
 import { PendingValidationBOL } from "../pages/BOL-details-page/pending-validation.page";
 import { DuplicatedBOL } from "../pages/BOL-details-page/duplicate.page";
 import { GeneralDetails } from "../pages/BOL-details-page/general-details.page";
+import { ExtractionFailedBOL } from "../pages/BOL-details-page/extraction-failed.page";
 
 interface Fixtures {
   logIn: LogIn;
@@ -14,6 +15,7 @@ interface Fixtures {
   illegibleBOL: IllegibleBOL;
   pendingValidationBOL: PendingValidationBOL;
   duplicatedBOL: DuplicatedBOL;
+  extractionFailedBOL: ExtractionFailedBOL;
   generalDetails: GeneralDetails;
 }
 
@@ -35,6 +37,9 @@ const test = base.extend<Fixtures>({
   },
   duplicatedBOL: async ({ page }, use) => {
     await use(new DuplicatedBOL(page));
+  },
+  extractionFailedBOL: async ({ page }, use) => {
+    await use(new ExtractionFailedBOL(page));
   },
   generalDetails: async ({ page }, use) => {
     await use(new GeneralDetails(page));

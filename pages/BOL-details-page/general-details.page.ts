@@ -15,6 +15,7 @@ export class GeneralDetails {
   readonly weight1Input: Locator;
   readonly sequence1Input: Locator;
   readonly input: Locator;
+  //table items
   readonly tableContainer: Locator;
   readonly verticalDots: Locator;
   readonly menuRowDropdown: Locator;
@@ -24,7 +25,14 @@ export class GeneralDetails {
   readonly deleteRowDialog: Locator;
   readonly deleteRowCancelBtn: Locator;
   readonly deleteRowYesBtn: Locator;
-  readonly deleteRowXBtn: Locator;
+  readonly xBtn: Locator;
+  // generate link
+  readonly generateLinkBtn: Locator;
+  readonly viewLink: Locator;
+  readonly linkForAppContainer: Locator;
+  readonly linkForApp: Locator;
+  readonly closeBtn: Locator;
+  readonly toastMsg: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -43,6 +51,7 @@ export class GeneralDetails {
     this.weight1Input = page.locator("td.mantine-Table-td > div").nth(2);
     this.sequence1Input = page.locator("td.mantine-Table-td > div").nth(3);
     this.input = page.locator("input.mantine-TextInput-input").nth(2);
+    //table items
     this.verticalDots = page.locator(
       "span.mantine-ActionIcon-icon > svg.tabler-icon-dots-vertical"
     );
@@ -58,9 +67,22 @@ export class GeneralDetails {
       name: "No, cancel",
     });
     this.deleteRowYesBtn = page.getByRole("button", { name: "Yes, delete" });
-    this.deleteRowXBtn = page
+    this.xBtn = page
       .locator('button.mantine-focus-auto > svg[viewBox="0 0 15 15"]')
       .nth(1);
+    //generate link
+    this.generateLinkBtn = page.getByRole("button", { name: "Generate Link" });
+    this.viewLink = page.getByText("View link").nth(1);
+    this.linkForAppContainer = page.getByRole("dialog", {
+      name: "Link for Versatile app",
+    });
+    this.linkForApp = page
+      .locator("a.mantine-Text-root.mantine-Anchor-root")
+      .nth(1);
+    this.closeBtn = page.getByRole("button", { name: "Close" });
+    this.toastMsg = page
+      .locator("div.mantine-Notifications-notification")
+      .first();
   }
   // make sure to provide exact string to this method
   async selectSite(siteName: any) {

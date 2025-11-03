@@ -30,7 +30,7 @@ test.describe("", () => {
     );
   });
 
-  test("Add new row to the table", async ({ page, generalDetails }) => {
+  test("Add new row to the table", async ({ generalDetails }) => {
     await expect(generalDetails.tableContainer).toHaveScreenshot(
       "table-initial.png"
     );
@@ -49,7 +49,7 @@ test.describe("", () => {
     );
   });
 
-  test("Delete row from the table", async ({ page, generalDetails }) => {
+  test("Delete row from the table", async ({ generalDetails }) => {
     await expect(generalDetails.tableContainer).toHaveScreenshot(
       "table-before-delete.png"
     );
@@ -79,7 +79,7 @@ test.describe("", () => {
     await expect(generalDetails.deleteRowDialog).toHaveScreenshot(
       "delete-row-dialog.png"
     );
-    await generalDetails.deleteRowXBtn.click();
+    await generalDetails.xBtn.click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
       "table-after-delete.png"
     );

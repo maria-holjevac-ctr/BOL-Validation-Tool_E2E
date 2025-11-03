@@ -30,16 +30,22 @@ test.describe("Log into BOL Validation tool", () => {
 
   test("Verify that user can log in with valid credentials", async ({
     logIn,
+    generalDetails,
   }) => {
     await logIn.login(process.env.USERNAME, process.env.PASSWORD);
-    await expect(logIn.toastMessage).toHaveScreenshot("success-log-in-msg.png");
+    await expect(generalDetails.toastMsg).toHaveScreenshot(
+      "success-log-in-msg.png"
+    );
   });
 
   test("Verify that user cannot log in with invalid credentials", async ({
     logIn,
+    generalDetails,
   }) => {
     await logIn.login("maria", "test");
-    await expect(logIn.toastMessage).toHaveScreenshot("failed-log-in-msg.png");
+    await expect(generalDetails.toastMsg).toHaveScreenshot(
+      "failed-log-in-msg.png"
+    );
     await expect(logIn.pageTitle).not.toBeVisible();
   });
 });
