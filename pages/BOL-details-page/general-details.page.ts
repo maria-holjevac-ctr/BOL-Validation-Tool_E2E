@@ -33,6 +33,9 @@ export class GeneralDetails {
   readonly linkForApp: Locator;
   readonly closeBtn: Locator;
   readonly toastMsg: Locator;
+  //toggle valid/invalid
+  readonly validBtn: Locator;
+  readonly illegibleBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -82,6 +85,11 @@ export class GeneralDetails {
     this.closeBtn = page.getByRole("button", { name: "Close" });
     this.toastMsg = page
       .locator("div.mantine-Notifications-notification")
+      .first();
+    this.validBtn = page.locator("label").filter({ hasText: "Valid" }).first();
+    this.illegibleBtn = page
+      .locator("label")
+      .filter({ hasText: "Illegible" })
       .first();
   }
   // make sure to provide exact string to this method

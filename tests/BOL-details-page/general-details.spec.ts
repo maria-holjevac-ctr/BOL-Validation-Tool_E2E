@@ -1,3 +1,4 @@
+import { generateKey } from "crypto";
 import { test, expect } from "../../fixtures/user.fixture";
 
 test.describe("", () => {
@@ -84,7 +85,51 @@ test.describe("", () => {
       "table-after-delete.png"
     );
   });
-  test("Valid/Illegible toggle functionality", async ({ page }) => {});
+  test("Valid/Illegible buttons functionality", async ({ generalDetails }) => {
+    // user can toggle between Valid/Illegible when critical data is available
+    await generalDetails.validBtn.click();
+    await expect(generalDetails.tableContainer).toHaveScreenshot(
+      "valid-button.png"
+    );
+    await generalDetails.illegibleBtn.click();
+    await expect(generalDetails.tableContainer).toHaveScreenshot(
+      "illegible-button.png"
+    );
+    // empty critical data disables buttons
+    await generalDetails.qty1Input.click();
+    await generalDetails.input.fill("");
+    await generalDetails.mark1Input.click();
+    await expect(generalDetails.validBtn).toBeDisabled();
+    await expect(generalDetails.illegibleBtn).toBeEnabled();
+    await expect(generalDetails.tableContainer).toHaveScreenshot(
+      "qty-missing.png"
+    );
+    await generalDetails.qty1Input.click();
+    await generalDetails.input.fill("1");
+    await generalDetails.mark1Input.click();
+    await generalDetails.input.fill("");
+    await generalDetails.qty1Input.click();
+    await expect(generalDetails.validBtn).toBeDisabled();
+    await expect(generalDetails.illegibleBtn).toBeEnabled();
+    await expect(generalDetails.tableContainer).toHaveScreenshot(
+      "mark-missing.png"
+    );
+    // filling data back enables buttons
+    await generalDetails.mark1Input.click();
+    await generalDetails.input.fill("34011");
+    await generalDetails.qty1Input.click();
+    await expect(generalDetails.validBtn).toBeEnabled();
+    await expect(generalDetails.illegibleBtn).toBeEnabled();
+    // empty non-critical data has buttons enabled
+    await generalDetails.weight1Input.click();
+    await generalDetails.input.fill("");
+    await generalDetails.sequence1Input.click();
+    await generalDetails.input.fill("");
+    await generalDetails.validBtn.click();
+    await expect(generalDetails.tableContainer).toHaveScreenshot(
+      "non-critical-empty.png"
+    );
+  });
   test("Validate Guide feature", async ({ page }) => {});
   test("Validate Magnify feature", async ({ page }) => {});
   test("Validate Rotate feature", async ({ page }) => {});
