@@ -36,6 +36,14 @@ export class GeneralDetails {
   //toggle valid/invalid
   readonly validBtn: Locator;
   readonly illegibleBtn: Locator;
+  //image features
+  readonly guideToggle: Locator;
+  readonly guideLine: Locator;
+  readonly magnifyBtn: Locator;
+  readonly rotateBtn: Locator;
+  readonly zoomInBtn: Locator;
+  readonly zoomOutBtn: Locator;
+  readonly imageContainer: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -91,6 +99,14 @@ export class GeneralDetails {
       .locator("label")
       .filter({ hasText: "Illegible" })
       .first();
+    //Image features
+    this.guideToggle = page.locator("span.mantine-Switch-track");
+    this.guideLine = page.getByRole("slider");
+    this.magnifyBtn = page.getByRole("button").filter({ hasText: /^$/ }).nth(4);
+    this.rotateBtn = page.getByRole("button").filter({ hasText: /^$/ }).nth(5);
+    this.zoomInBtn = page.locator("div:nth-child(4) > button").first();
+    this.zoomOutBtn = page.locator("div:nth-child(4) > button:nth-child(3)");
+    this.imageContainer = page.locator("div.mantine-ScrollArea-root").first();
   }
   // make sure to provide exact string to this method
   async selectSite(siteName: any) {
