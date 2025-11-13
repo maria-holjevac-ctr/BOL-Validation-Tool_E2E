@@ -52,8 +52,10 @@ export class GeneralDetails {
     this.image = page.locator("img").nth(1);
     this.removeStatusFilter = page.locator("button").nth(3);
     // BOL details input fields
-    this.fabricatorInput = page.getByRole("textbox", { name: "Fabricator" });
-    this.loadNumberInput = page.getByRole("textbox", { name: "Load number" });
+    this.fabricatorInput = page
+      .locator("input.mantine-TextInput-input")
+      .first();
+    this.loadNumberInput = page.locator("input.mantine-TextInput-input").nth(1);
     this.deleteDateBtn = page
       .locator("button.mantine-UnstyledButton-root")
       .nth(3);
@@ -94,11 +96,11 @@ export class GeneralDetails {
     this.toastMsg = page
       .locator("div.mantine-Notifications-notification")
       .first();
-    this.validBtn = page.locator("label").filter({ hasText: "Valid" }).first();
+    this.validBtn = page.locator("label").filter({ hasText: "Valid" }).nth(2);
     this.illegibleBtn = page
       .locator("label")
       .filter({ hasText: "Illegible" })
-      .first();
+      .nth(1);
     //Image features
     this.guideToggle = page.locator("span.mantine-Switch-track");
     this.guideLine = page.getByRole("slider");

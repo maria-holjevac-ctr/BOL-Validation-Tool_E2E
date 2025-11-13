@@ -6,6 +6,8 @@ export class PendingValidationBOL {
 
   constructor(page: Page) {
     this.page = page;
-    this.tableRow = page.getByRole("cell", { name: "Pending validation" });
+    this.tableRow = page
+      .getByRole("cell", { name: "Pending validation" })
+      .first();
   }
 }
