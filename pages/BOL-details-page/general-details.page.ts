@@ -15,6 +15,9 @@ export class GeneralDetails {
   readonly weight1Input: Locator;
   readonly sequence1Input: Locator;
   readonly input: Locator;
+  // load and fabricator header
+  readonly headerContainer: Locator;
+  readonly resetDateInput: Locator;
   //table items
   readonly tableContainer: Locator;
   readonly verticalDots: Locator;
@@ -64,6 +67,12 @@ export class GeneralDetails {
     this.weight1Input = page.locator("td.mantine-Table-td > div").nth(2);
     this.sequence1Input = page.locator("td.mantine-Table-td > div").nth(3);
     this.input = page.locator("input.mantine-TextInput-input").nth(2);
+    // fabricator and load container
+    this.headerContainer = page.locator("div.mantine-Group-root").nth(9);
+    this.resetDateInput = page
+      .locator("form")
+      .getByRole("button")
+      .filter({ hasText: /^$/ });
     //table items
     this.verticalDots = page.locator(
       "span.mantine-ActionIcon-icon > svg.tabler-icon-dots-vertical"
@@ -96,11 +105,8 @@ export class GeneralDetails {
     this.toastMsg = page
       .locator("div.mantine-Notifications-notification")
       .first();
-    this.validBtn = page.locator("label").filter({ hasText: "Valid" }).nth(2);
-    this.illegibleBtn = page
-      .locator("label")
-      .filter({ hasText: "Illegible" })
-      .nth(1);
+    this.validBtn = page.locator("label").filter({ hasText: "Valid" });
+    this.illegibleBtn = page.locator("label").filter({ hasText: "Illegible" });
     //Image features
     this.guideToggle = page.locator("span.mantine-Switch-track");
     this.guideLine = page.getByRole("slider");
