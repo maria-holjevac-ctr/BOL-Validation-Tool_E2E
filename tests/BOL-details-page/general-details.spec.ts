@@ -1,4 +1,3 @@
-import { generateKey } from "crypto";
 import { test, expect } from "../../fixtures/user.fixture";
 
 test.describe("General details of uploaded BOLs", () => {
@@ -256,6 +255,5 @@ test.describe("General details of uploaded BOLs", () => {
     await generalDetails.noteContainer.click();
     await expect(generalDetails.noteDialog).toBeVisible();
     await expect(page).toHaveScreenshot("open-note-dialog.png");
-    // no data BOLs have empty state in table, they can manually add data
   });
 });
