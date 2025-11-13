@@ -1,3 +1,4 @@
+import { generateKey } from "crypto";
 import { test, expect } from "../../fixtures/user.fixture";
 
 test.describe("General details of uploaded BOLs", () => {
@@ -246,6 +247,15 @@ test.describe("General details of uploaded BOLs", () => {
     await page.goto("/bol-validation?bolId=492&siteId=10000307");
     await page.waitForTimeout(2000);
     await expect(page).toHaveScreenshot("no-data-BOL.png");
+    // no data BOLs have empty state in table, they can manually add data
+  });
+  test("Validate Note", async ({ generalDetails, page }) => {
+    await expect(generalDetails.noteContainer).toHaveScreenshot(
+      "note-container.png"
+    );
+    await generalDetails.noteContainer.click();
+    await expect(generalDetails.noteDialog).toBeVisible();
+    await expect(page).toHaveScreenshot("open-note-dialog.png");
     // no data BOLs have empty state in table, they can manually add data
   });
 });

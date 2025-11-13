@@ -47,6 +47,9 @@ export class GeneralDetails {
   readonly zoomInBtn: Locator;
   readonly zoomOutBtn: Locator;
   readonly imageContainer: Locator;
+  //note
+  readonly noteContainer: Locator;
+  readonly noteDialog: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -115,6 +118,11 @@ export class GeneralDetails {
     this.zoomInBtn = page.locator("div:nth-child(4) > button").first();
     this.zoomOutBtn = page.locator("div:nth-child(4) > button:nth-child(3)");
     this.imageContainer = page.locator("div.mantine-ScrollArea-root").first();
+    //note
+    this.noteContainer = page.locator(
+      'div.mantine-Stack-root[aria-haspopup="dialog"]'
+    );
+    this.noteDialog = page.locator('div[role="dialog"]');
   }
   // make sure to provide exact string to this method
   async selectSite(siteName: any) {
