@@ -27,7 +27,7 @@ test.describe("Upload new BOL", () => {
     });
     expect(res.ok()).toBeTruthy();
 
-    const uploadedBy = 304;
+    const uploadedBy = 3226;
     const filePath = "BOLs/1page/ohio-00004.png";
 
     const generateUrlsBody = await res.json();
