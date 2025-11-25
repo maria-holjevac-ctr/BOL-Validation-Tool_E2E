@@ -1,67 +1,72 @@
 import { test, expect } from "../fixtures/user.fixture";
-import fs from "node:fs";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import { uploadDocumentImages } from "../util/helper";
 
 test.describe("Upload new BOL", () => {
   test.use({ user: "maria" });
   test.beforeEach(async ({ page }) => {
     await page.goto("");
   });
-  // WIP - this will be a helper method and will be reused for multiple different uploads
-  test.only("Upload one page BOL", async ({ request }) => {
-    const api = process.env.DOCUMENT_PROCESSING_API;
-    const siteId = 10000222;
-    const contentType = "image/png";
-    // generate pre-signed S3 URLs for uploading BOL document images directly to cloud storage
-    const res = await request.post(`${api}upload/generate-urls`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      data: {
-        siteId,
-        files: [{ fileName: "ohio-00004.png", contentType }],
-      },
+
+  test("Upload one BOL image", async ({ request }) => {
+    const result = await uploadDocumentImages({
+      request,
+      siteId: 10000222,
+      uploadedBy: 3226,
+      filePaths: ["BOLs/1page/ohio-00004.png"],
+      note: "Automated upload of 1 BOL",
     });
-    expect(res.ok()).toBeTruthy();
+    expect(result.registerStatus).toBe(201);
+  });
 
-    const uploadedBy = 3226;
-    const filePath = "BOLs/1page/ohio-00004.png";
-
-    const generateUrlsBody = await res.json();
-
-    const documentUuid = generateUrlsBody.documentUuid;
-    const fileInfo = generateUrlsBody.files[0];
-
-    const fileBytes = await fs.promises.readFile(filePath);
-
-    //sends your local file’s bytes to the AWS S3 bucket using the presigned URL
-    const put = await request.put(fileInfo.url, {
-      headers: { "Content-Type": contentType },
-      data: fileBytes,
+  test("Upload 3 BOL images", async ({ request }) => {
+    const result = await uploadDocumentImages({
+      request,
+      siteId: 10000222,
+      uploadedBy: 3226,
+      filePaths: [
+        "BOLs/3pages/ohio-00003-1.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-3.png",
+      ],
+      note: "Automated upload of 3 BOLs",
     });
+    expect(result.registerStatus).toBe(201);
+  });
 
-    expect(put.ok()).toBeTruthy();
-
-    //registers metadata about the uploaded file so the backend knows what to do next
-    const register = await request.post(`${api}${documentUuid}`, {
-      headers: { "Content-Type": "application/json" },
-      data: {
-        siteId,
-        uploadedBy,
-        note: "Automated upload",
-        files: [
-          {
-            fileName: fileInfo.fileName,
-            fingerprint: "dummy-fingerprint",
-            objectKey: fileInfo.objectKey,
-            contentType,
-          },
-        ],
-      },
+  test("Upload 10 BOL images", async ({ request }) => {
+    const result = await uploadDocumentImages({
+      request,
+      siteId: 10000222,
+      uploadedBy: 3226,
+      filePaths: [
+        "BOLs/3pages/ohio-00003-1.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-3.png",
+      ],
+      note: "Automated upload of 10 BOLs",
     });
-    expect(register.ok()).toBeTruthy();
+    expect(result.registerStatus).toBe(201);
+  });
+
+  test("Upload no data BOL image", async ({ request }) => {
+    const result = await uploadDocumentImages({
+      request,
+      siteId: 10000222,
+      uploadedBy: 3226,
+      filePaths: [
+        "BOLs/3pages/ohio-00003-1.png",
+        "BOLs/3pages/ohio-00003-2.png",
+        "BOLs/3pages/ohio-00003-3.png",
+      ],
+      note: "Automated upload of no data BOL",
+    });
+    expect(result.registerStatus).toBe(201);
   });
 });
