@@ -32,7 +32,7 @@ export async function uploadDocumentImages({
     contentType: resolvedCT,
   }));
 
-  const res = await request.post(`${apiBase}upload/generate-urls`, {
+  const res = await request.post(`${apiBase}/documents/upload/generate-urls`, {
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     data: { siteId, files: filesForGen },
   });
@@ -72,7 +72,7 @@ export async function uploadDocumentImages({
     })
   );
 
-  const register = await request.post(`${apiBase}${documentUuid}`, {
+  const register = await request.post(`${apiBase}/documents/${documentUuid}`, {
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     data: {
       siteId,
@@ -87,4 +87,50 @@ export async function uploadDocumentImages({
     .catch(async () => await register.text());
 
   return { documentUuid, registerStatus: register.status(), registerBody };
+}
+
+type DeleteParams = {
+  request: any; // Playwright's request context
+  siteId: number;
+  bolId: number;
+  apiBase?: string; // optional; defaults to process.env.DOCUMENT_PROCESSING_API
+};
+
+/**
+ * Soft deletes a BOL document from the system
+ * Endpoint: DELETE {apiBase}/sites/{siteId}/bol-documents/{bolId}
+ */
+export async function deleteBolDocument(
+  request: any,
+  siteId: number,
+  bolId: any,
+  deletedBy: number,
+  apiBase: any = process.env.DOCUMENT_PROCESSING_API
+) {
+  if (!apiBase) throw new Error("DOCUMENT_PROCESSING_API env var not set");
+  if (!siteId) throw new Error("siteId is required");
+  if (!bolId) throw new Error("bolId is required");
+  if (!deletedBy) throw new Error("deletedBy is required");
+
+  const endpoint = `${apiBase}/sites/${siteId}/bol-documents/${bolId}`;
+
+  const res = await request.delete(endpoint, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    data: {
+      deletedBy,
+    },
+  });
+
+  const body = await res.json().catch(async () => await res.text());
+
+  if (!res.ok()) {
+    throw new Error(
+      `Failed to delete BOL document ${bolId} for site ${siteId}: ${res.status()} ${body}`
+    );
+  }
+
+  return { status: res.status(), body };
 }

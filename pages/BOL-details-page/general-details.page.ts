@@ -6,6 +6,7 @@ export class GeneralDetails {
   readonly BOLHeader: Locator;
   readonly image: Locator;
   readonly removeStatusFilter: Locator;
+  readonly sortBolId: Locator;
   // BOL details input fields
   readonly fabricatorInput: Locator;
   readonly loadNumberInput: Locator;
@@ -57,6 +58,9 @@ export class GeneralDetails {
     this.BOLHeader = page.getByRole("heading", { name: "BOL #" });
     this.image = page.locator("img").nth(1);
     this.removeStatusFilter = page.locator("button").nth(3);
+    this.sortBolId = page
+      .locator("div.mantine-datatable-header-cell-sortable-group")
+      .first();
     // BOL details input fields
     this.fabricatorInput = page
       .locator("input.mantine-TextInput-input")
@@ -69,7 +73,7 @@ export class GeneralDetails {
     this.mark1Input = page.locator("td.mantine-Table-td > div").nth(1);
     this.weight1Input = page.locator("td.mantine-Table-td > div").nth(2);
     this.sequence1Input = page.locator("td.mantine-Table-td > div").nth(3);
-    this.input = page.locator("input.mantine-TextInput-input").nth(2);
+    this.input = page.locator("input.mantine-Input-input").nth(2);
     // fabricator and load container
     this.headerContainer = page.locator("div.mantine-Group-root").nth(9);
     this.resetDateInput = page
