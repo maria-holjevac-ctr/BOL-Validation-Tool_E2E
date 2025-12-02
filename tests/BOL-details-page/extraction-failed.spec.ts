@@ -26,7 +26,9 @@ test.describe("Extraction Failed BOL", () => {
   test("User can copy link to Archive page", async ({
     extractionFailedBOL,
     generalDetails,
+    page,
   }) => {
+    await page.waitForTimeout(3000);
     await generalDetails.generateLinkBtn.click();
     await expect(generalDetails.toastMsg).toHaveScreenshot(
       "generated-link-msg.png"

@@ -1,7 +1,9 @@
 import { test, expect } from "../fixtures/user.fixture";
 import { uploadDocumentImages, deleteBolDocument } from "../util/helper";
 
-test.describe("Upload and delete BOLs", () => {
+// skipping this because I don't want to trigger API each test run
+// remove skip when you want to run this
+test.describe.skip("Upload and delete BOLs", () => {
   test.use({ user: "maria" });
   test.beforeEach(async ({ page }) => {
     await page.goto("");

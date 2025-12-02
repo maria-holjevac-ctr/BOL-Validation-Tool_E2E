@@ -8,6 +8,7 @@ test.describe("Pending Validation BOL details page", () => {
     await pendingValidationBOL.tableRow.click();
   });
   // Details of Pending Validation BOL are initialy presented in edit mode, with Save and Commit button in the top right corner
+  //587 - DO NOT DELETE
   test("Verify UI of whole Pending Validation BOL details page", async ({
     page,
     pendingValidationBOL,
