@@ -30,6 +30,7 @@ export class GeneralDetails {
   readonly deleteRowCancelBtn: Locator;
   readonly deleteRowYesBtn: Locator;
   readonly xBtn: Locator;
+  readonly ignoreRowBtn: Locator;
   // generate link
   readonly generateLinkBtn: Locator;
   readonly viewLink: Locator;
@@ -99,6 +100,7 @@ export class GeneralDetails {
     this.xBtn = page
       .locator('button.mantine-focus-auto > svg[viewBox="0 0 15 15"]')
       .nth(1);
+    this.ignoreRowBtn = page.locator("button.mantine-Menu-item").nth(2);
     //generate link
     this.generateLinkBtn = page.getByRole("button", { name: "Generate Link" });
     this.viewLink = page.getByText("View link").nth(1);

@@ -82,6 +82,35 @@ test.describe("General details of uploaded BOLs", () => {
       "table-after-delete.png"
     );
   });
+
+  test("Ignore row feature", async ({ generalDetails, page }) => {
+    // option under Kebab menu
+    await expect(generalDetails.validBtn.nth(2)).toBeEnabled();
+    await expect(generalDetails.illegibleBtn.nth(1)).toBeEnabled();
+    await generalDetails.verticalDots.first().click();
+    await expect(generalDetails.menuRowDropdown).toHaveScreenshot(
+      "ignore-option-dropdown.png"
+    );
+    // ignored row design
+    await generalDetails.ignoreRowBtn.click();
+    await expect(generalDetails.toastMsg).toHaveScreenshot(
+      "ignored-row-msg.png"
+    );
+    await expect(generalDetails.validBtn.nth(2)).toBeDisabled();
+    await expect(generalDetails.illegibleBtn.nth(1)).toBeDisabled();
+    await expect(generalDetails.tableContainer).toHaveScreenshot(
+      "ignored-row-in-table.png"
+    );
+    // unignore row
+    await generalDetails.verticalDots.first().click();
+    await generalDetails.ignoreRowBtn.click();
+    await expect(generalDetails.validBtn.nth(2)).toBeEnabled();
+    await expect(generalDetails.illegibleBtn.nth(1)).toBeEnabled();
+    await expect(generalDetails.tableContainer).toHaveScreenshot(
+      "row-unignored-in-table.png"
+    );
+  });
+
   test("Valid/Illegible buttons for Fabricator and Load", async ({
     generalDetails,
   }) => {
@@ -119,6 +148,7 @@ test.describe("General details of uploaded BOLs", () => {
       "date-empty.png"
     );
   });
+
   test("Valid/Illegible buttons functionality in the table", async ({
     generalDetails,
   }) => {
@@ -166,88 +196,14 @@ test.describe("General details of uploaded BOLs", () => {
       "non-critical-empty.png"
     );
   });
-  test("Validate Guide feature", async ({ page, generalDetails }) => {
-    // initial state - guide is on
-    await expect(generalDetails.guideLine).toBeVisible();
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guide-on.png"
-    );
-    // user can toggle between guide on and off
-    await generalDetails.guideToggle.click();
-    await expect(generalDetails.guideLine).not.toBeVisible();
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guide-off.png"
-    );
-    // user can drag guide up and down
-    await generalDetails.guideToggle.click();
-    const box = await generalDetails.guideLine.boundingBox();
-    if (!box) throw new Error("Guide not visible");
-    // go to the center of the element
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.down();
-    // move from center down for 300px
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + 300);
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guideline-down.png"
-    );
-    //move from center up for 300px
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 - 300);
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guideline-up.png"
-    );
-  });
-  test("Validate Magnify feature", async ({ page, generalDetails }) => {
-    await generalDetails.magnifyBtn.click();
-    // access coordinates of image container
-    const box = await generalDetails.imageContainer.boundingBox();
-    if (!box) throw new Error("No image container displayed");
-    //position playwright cursor in the center
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await expect(generalDetails.imageContainer).toHaveScreenshot("magnify.png");
-  });
-  test("Validate Rotate feature", async ({ page, generalDetails }) => {
-    //initial state
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "non-rotated-image.png"
-    );
-    await generalDetails.rotateBtn.click();
-    await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "success-rotate.png"
-    );
-    //waiting for image to rotate
-    await page.waitForTimeout(2000);
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "rotated-image.png"
-    );
-    // BUG: rotate is saved even when user does not explicitly save it on 'Save' button
-    // thats why I am clicking though again to rotate it to initial position
-    await generalDetails.rotateBtn.click();
-    await page.waitForTimeout(2000);
-    await generalDetails.rotateBtn.click();
-    await page.waitForTimeout(2000);
-    await generalDetails.rotateBtn.click();
-    await page.waitForTimeout(2000);
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "non-rotated-image.png"
-    );
-  });
-  test("Validate Zoom in/out feature", async ({ page, generalDetails }) => {
-    await generalDetails.zoomInBtn.dblclick();
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "zoomed-in-image.png"
-    );
-    await generalDetails.zoomOutBtn.dblclick();
-    await generalDetails.zoomOutBtn.dblclick();
-    await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "zoomed-out-image.png"
-    );
-  });
+
   test("Validate No data scan", async ({ page }) => {
     await page.goto("/bol-validation?bolId=635&siteId=10000307");
     await page.waitForTimeout(2000);
     await expect(page).toHaveScreenshot("no-data-BOL.png");
     // no data BOLs have empty state in table, they can manually add data
   });
+
   test("Validate Note", async ({ generalDetails, page }) => {
     await expect(generalDetails.noteContainer).toHaveScreenshot(
       "note-container.png"

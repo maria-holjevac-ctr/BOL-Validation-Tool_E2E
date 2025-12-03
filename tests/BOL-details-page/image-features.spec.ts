@@ -1,0 +1,88 @@
+import { test, expect } from "../../fixtures/user.fixture";
+
+test.describe("Details page - image features", () => {
+  test.use({ user: "maria" });
+  test.beforeEach(async ({ page, generalDetails, table }) => {
+    await page.goto("");
+    await generalDetails.selectSite("QA Test Site");
+    await table.pendingValidationBOL.click();
+    await page.waitForTimeout(2000);
+  });
+
+  test("Validate Guide feature", async ({ page, generalDetails }) => {
+    // initial state - guide is on
+    await expect(generalDetails.guideLine).toBeVisible();
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "guide-on.png"
+    );
+    // user can toggle between guide on and off
+    await generalDetails.guideToggle.click();
+    await expect(generalDetails.guideLine).not.toBeVisible();
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "guide-off.png"
+    );
+    // user can drag guide up and down
+    await generalDetails.guideToggle.click();
+    const box = await generalDetails.guideLine.boundingBox();
+    if (!box) throw new Error("Guide not visible");
+    // go to the center of the element
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    // move from center down for 300px
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + 300);
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "guideline-down.png"
+    );
+    //move from center up for 300px
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 - 300);
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "guideline-up.png"
+    );
+  });
+  test("Validate Magnify feature", async ({ page, generalDetails }) => {
+    await generalDetails.magnifyBtn.click();
+    // access coordinates of image container
+    const box = await generalDetails.imageContainer.boundingBox();
+    if (!box) throw new Error("No image container displayed");
+    //position playwright cursor in the center
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(generalDetails.imageContainer).toHaveScreenshot("magnify.png");
+  });
+  test("Validate Rotate feature", async ({ page, generalDetails }) => {
+    //initial state
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "non-rotated-image.png"
+    );
+    await generalDetails.rotateBtn.click();
+    await expect(generalDetails.toastMsg).toHaveScreenshot(
+      "success-rotate.png"
+    );
+    //waiting for image to rotate
+    await page.waitForTimeout(2000);
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "rotated-image.png"
+    );
+    // BUG: rotate is saved even when user does not explicitly save it on 'Save' button
+    // thats why I am clicking though again to rotate it to initial position
+    await generalDetails.rotateBtn.click();
+    await page.waitForTimeout(2000);
+    await generalDetails.rotateBtn.click();
+    await page.waitForTimeout(2000);
+    await generalDetails.rotateBtn.click();
+    await page.waitForTimeout(2000);
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "non-rotated-image.png"
+    );
+  });
+  test("Validate Zoom in/out feature", async ({ page, generalDetails }) => {
+    await generalDetails.zoomInBtn.dblclick();
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "zoomed-in-image.png"
+    );
+    await generalDetails.zoomOutBtn.dblclick();
+    await generalDetails.zoomOutBtn.dblclick();
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "zoomed-out-image.png"
+    );
+  });
+});
