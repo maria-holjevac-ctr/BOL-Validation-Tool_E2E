@@ -52,6 +52,11 @@ export class GeneralDetails {
   //note
   readonly noteContainer: Locator;
   readonly noteDialog: Locator;
+  // elements for masking
+  readonly bolID: Locator;
+  readonly lastUpdatedDate: Locator;
+  //action buttons
+  readonly saveBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -129,6 +134,11 @@ export class GeneralDetails {
       'div.mantine-Stack-root[aria-haspopup="dialog"]'
     );
     this.noteDialog = page.locator('div[role="dialog"]');
+    // elements for masking
+    this.bolID = page.locator("h3.mantine-Title-root");
+    this.lastUpdatedDate = page.locator("p.mantine-Text-root").nth(1);
+    // action buttons
+    this.saveBtn = page.getByRole("button", { name: "Save" });
   }
   // make sure to provide exact string to this method
   async selectSite(siteName: any) {
