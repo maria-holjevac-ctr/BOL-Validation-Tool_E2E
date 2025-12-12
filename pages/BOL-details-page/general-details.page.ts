@@ -57,6 +57,11 @@ export class GeneralDetails {
   readonly lastUpdatedDate: Locator;
   //action buttons
   readonly saveBtn: Locator;
+  readonly commitBtn: Locator;
+  readonly commitDialog: Locator;
+  readonly cancelBtn: Locator;
+  readonly yesCommitBtn: Locator;
+  readonly editBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -139,6 +144,11 @@ export class GeneralDetails {
     this.lastUpdatedDate = page.locator("p.mantine-Text-root").nth(1);
     // action buttons
     this.saveBtn = page.getByRole("button", { name: "Save" });
+    this.commitBtn = page.getByRole("button", { name: "Commit" });
+    this.commitDialog = page.getByRole("dialog");
+    this.cancelBtn = page.getByRole("button", { name: "No, go back" });
+    this.yesCommitBtn = page.getByRole("button", { name: "Yes, commit" });
+    this.editBtn = page.getByRole("button", { name: "Edit" });
   }
   // make sure to provide exact string to this method
   async selectSite(siteName: any) {
