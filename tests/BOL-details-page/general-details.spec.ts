@@ -198,7 +198,7 @@ test.describe("General details of uploaded BOLs", () => {
   });
 
   test("Validate No data scan", async ({ page }) => {
-    await page.goto("/bol-validation?bolId=635&siteId=10000307");
+    await page.goto("/bol-validation?bolId=677&siteId=10000307");
     await page.waitForTimeout(2000);
     await expect(page).toHaveScreenshot("no-data-BOL.png");
     // no data BOLs have empty state in table, they can manually add data
