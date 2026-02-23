@@ -24,62 +24,62 @@ test.describe("General details of uploaded BOLs", () => {
     await generalDetails.sequence1Input.click();
     await generalDetails.input.fill("");
     await expect(generalDetails.page).toHaveScreenshot(
-      "critical-fields_BOL-details.png"
+      "critical-fields_BOL-details.png",
     );
   });
 
   test("Add new row to the table", async ({ generalDetails }) => {
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "table-initial.png"
+      "table-initial.png",
     );
     await generalDetails.verticalDots.first().click();
     await expect(generalDetails.menuRowDropdown).toHaveScreenshot(
-      "add-delete-row-dropdown.png"
+      "add-delete-row-dropdown.png",
     );
     await generalDetails.addRowAbove.click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "new-row-above.png"
+      "new-row-above.png",
     );
     await generalDetails.verticalDots.nth(1).click();
     await generalDetails.addRowBelow.click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "new-row-below.png"
+      "new-row-below.png",
     );
   });
 
   test("Delete row from the table", async ({ generalDetails }) => {
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "table-before-delete.png"
+      "table-before-delete.png",
     );
     //delete first row from the table
     await generalDetails.verticalDots.first().click();
     await generalDetails.deleteRow.click();
     await expect(generalDetails.deleteRowDialog).toHaveScreenshot(
-      "delete-row-dialog.png"
+      "delete-row-dialog.png",
     );
     await generalDetails.deleteRowYesBtn.click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "table-after-delete.png"
+      "table-after-delete.png",
     );
     //cancel button - delete dialog
     await generalDetails.verticalDots.first().click();
     await generalDetails.deleteRow.click();
     await expect(generalDetails.deleteRowDialog).toHaveScreenshot(
-      "delete-row-dialog.png"
+      "delete-row-dialog.png",
     );
     await generalDetails.deleteRowCancelBtn.click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "table-after-delete.png"
+      "table-after-delete.png",
     );
     // X button - delete dialog
     await generalDetails.verticalDots.first().click();
     await generalDetails.deleteRow.click();
     await expect(generalDetails.deleteRowDialog).toHaveScreenshot(
-      "delete-row-dialog.png"
+      "delete-row-dialog.png",
     );
     await generalDetails.xBtn.click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "table-after-delete.png"
+      "table-after-delete.png",
     );
   });
 
@@ -89,17 +89,17 @@ test.describe("General details of uploaded BOLs", () => {
     await expect(generalDetails.illegibleBtn.nth(1)).toBeEnabled();
     await generalDetails.verticalDots.first().click();
     await expect(generalDetails.menuRowDropdown).toHaveScreenshot(
-      "ignore-option-dropdown.png"
+      "ignore-option-dropdown.png",
     );
     // ignored row design
     await generalDetails.ignoreRowBtn.click();
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "ignored-row-msg.png"
+      "ignored-row-msg.png",
     );
     await expect(generalDetails.validBtn.nth(2)).toBeDisabled();
     await expect(generalDetails.illegibleBtn.nth(1)).toBeDisabled();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "ignored-row-in-table.png"
+      "ignored-row-in-table.png",
     );
     // unignore row
     await generalDetails.verticalDots.first().click();
@@ -107,7 +107,7 @@ test.describe("General details of uploaded BOLs", () => {
     await expect(generalDetails.validBtn.nth(2)).toBeEnabled();
     await expect(generalDetails.illegibleBtn.nth(1)).toBeEnabled();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "row-unignored-in-table.png"
+      "row-unignored-in-table.png",
     );
   });
 
@@ -117,25 +117,25 @@ test.describe("General details of uploaded BOLs", () => {
     // user can toggle between Valid/Illegible when Fabricator and Load data is available
     await generalDetails.validBtn.nth(1).click();
     await expect(generalDetails.headerContainer).toHaveScreenshot(
-      "valid-button1st.png"
+      "valid-button1st.png",
     );
     await generalDetails.illegibleBtn.first().click();
     await expect(generalDetails.headerContainer).toHaveScreenshot(
-      "illegible-button1st.png"
+      "illegible-button1st.png",
     );
     // empty critical data disables buttons
     await generalDetails.fabricatorInput.fill("");
     await expect(generalDetails.validBtn.nth(1)).toBeDisabled();
     await expect(generalDetails.illegibleBtn.first()).toBeEnabled();
     await expect(generalDetails.headerContainer).toHaveScreenshot(
-      "fabricator-missing.png"
+      "fabricator-missing.png",
     );
     await generalDetails.fabricatorInput.fill("Ohio Structural Steel Inc.");
     await generalDetails.loadNumberInput.fill("");
     await expect(generalDetails.validBtn.nth(1)).toBeDisabled();
     await expect(generalDetails.illegibleBtn.first()).toBeEnabled();
     await expect(generalDetails.headerContainer).toHaveScreenshot(
-      "load-missing.png"
+      "load-missing.png",
     );
     // filling data back enables buttons
     await generalDetails.loadNumberInput.fill("00012");
@@ -145,7 +145,7 @@ test.describe("General details of uploaded BOLs", () => {
     await generalDetails.resetDateInput.click();
     await generalDetails.validBtn.nth(1).click();
     await expect(generalDetails.headerContainer).toHaveScreenshot(
-      "date-empty.png"
+      "date-empty.png",
     );
   });
 
@@ -155,11 +155,11 @@ test.describe("General details of uploaded BOLs", () => {
     // user can toggle between Valid/Illegible when critical data is available
     await generalDetails.validBtn.nth(2).click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "valid-button2nd.png"
+      "valid-button2nd.png",
     );
     await generalDetails.illegibleBtn.nth(1).click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "illegible-button2nd.png"
+      "illegible-button2nd.png",
     );
     // empty critical data disables buttons
     await generalDetails.qty1Input.click();
@@ -168,7 +168,7 @@ test.describe("General details of uploaded BOLs", () => {
     await expect(generalDetails.validBtn.nth(2)).toBeDisabled();
     await expect(generalDetails.illegibleBtn.nth(1)).toBeEnabled();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "qty-missing.png"
+      "qty-missing.png",
     );
     await generalDetails.qty1Input.click();
     await generalDetails.input.fill("1");
@@ -178,7 +178,7 @@ test.describe("General details of uploaded BOLs", () => {
     await expect(generalDetails.validBtn.nth(2)).toBeDisabled();
     await expect(generalDetails.illegibleBtn.nth(1)).toBeEnabled();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "mark-missing.png"
+      "mark-missing.png",
     );
     // filling data back enables buttons
     await generalDetails.mark1Input.click();
@@ -193,12 +193,13 @@ test.describe("General details of uploaded BOLs", () => {
     await generalDetails.input.fill("");
     await generalDetails.validBtn.nth(2).click();
     await expect(generalDetails.tableContainer).toHaveScreenshot(
-      "non-critical-empty.png"
+      "non-critical-empty.png",
     );
   });
 
+  //add new no data BOL id here
   test("Validate No data scan", async ({ page }) => {
-    await page.goto("/bol-validation?bolId=677&siteId=10000307");
+    await page.goto("/bol-validation?bolId=1371&siteId=10000307");
     await page.waitForTimeout(2000);
     await expect(page).toHaveScreenshot("no-data-BOL.png");
     // no data BOLs have empty state in table, they can manually add data
@@ -206,10 +207,16 @@ test.describe("General details of uploaded BOLs", () => {
 
   test("Validate Note", async ({ generalDetails, page }) => {
     await expect(generalDetails.noteContainer).toHaveScreenshot(
-      "note-container.png"
+      "note-container.png",
     );
     await generalDetails.noteContainer.click();
     await expect(generalDetails.noteDialog).toBeVisible();
     await expect(page).toHaveScreenshot("open-note-dialog.png");
+  });
+
+  test("Empty state - non existing BOL", async ({ page }) => {
+    await page.goto("/bol-validation?bolId=677&siteId=10000307");
+    await page.waitForTimeout(2000);
+    await expect(page).toHaveScreenshot("empty-state_non-existing-BOL.png");
   });
 });

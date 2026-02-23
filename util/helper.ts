@@ -38,7 +38,7 @@ export async function uploadDocumentImages({
   });
   if (!res.ok())
     throw new Error(
-      `Failed to generate URLs: ${res.status()} ${await res.text()}`
+      `Failed to generate URLs: ${res.status()} ${await res.text()}`,
     );
 
   const { documentUuid, files: presigned } = await res.json();
@@ -56,10 +56,10 @@ export async function uploadDocumentImages({
 
       if (!put.ok()) {
         throw new Error(
-          `S3 PUT failed for ${f.fileName}: ${put.status()} ${await put.text()}`
+          `S3 PUT failed for ${f.fileName}: ${put.status()} ${await put.text()}`,
         );
       }
-    })
+    }),
   );
 
   // Register the uploaded files with the backend
@@ -69,7 +69,7 @@ export async function uploadDocumentImages({
       fingerprint: "dummy-fingerprint",
       objectKey: f.objectKey,
       contentType: resolvedCT,
-    })
+    }),
   );
 
   const register = await request.post(`${apiBase}/documents/${documentUuid}`, {
@@ -89,13 +89,6 @@ export async function uploadDocumentImages({
   return { documentUuid, registerStatus: register.status(), registerBody };
 }
 
-type DeleteParams = {
-  request: any; // Playwright's request context
-  siteId: number;
-  bolId: number;
-  apiBase?: string; // optional; defaults to process.env.DOCUMENT_PROCESSING_API
-};
-
 /**
  * Soft deletes a BOL document from the system
  * Endpoint: DELETE {apiBase}/sites/{siteId}/bol-documents/{bolId}
@@ -105,7 +98,7 @@ export async function deleteBolDocument(
   siteId: number,
   bolId: any,
   deletedBy: number,
-  apiBase: any = process.env.DOCUMENT_PROCESSING_API
+  apiBase: any = process.env.DOCUMENT_PROCESSING_API,
 ) {
   if (!apiBase) throw new Error("DOCUMENT_PROCESSING_API env var not set");
   if (!siteId) throw new Error("siteId is required");
@@ -128,7 +121,7 @@ export async function deleteBolDocument(
 
   if (!res.ok()) {
     throw new Error(
-      `Failed to delete BOL document ${bolId} for site ${siteId}: ${res.status()} ${body}`
+      `Failed to delete BOL document ${bolId} for site ${siteId}: ${res.status()} ${body}`,
     );
   }
 

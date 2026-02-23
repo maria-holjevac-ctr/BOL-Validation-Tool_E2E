@@ -1,8 +1,28 @@
 import { test, expect } from "../fixtures/user.fixture";
 import { uploadDocumentImages, deleteBolDocument } from "../util/helper";
 
-// skipping this because I don't want to trigger API each test run
-// remove skip when you want to run this
+/**
+ * These tests are intentionally skipped to avoid triggering API calls on every test run.
+ *
+ * Run only when you want to test upload/delete process, or in need of new BOLs uploaded - specific ones deleted.
+ *
+ * To execute these tests:
+ * Remove the `.skip` annotation,
+ * Add `.only` annotation to specific test you want to run,
+ * If you want to run only this describe block, add `.only` to the describe itself.
+ *
+ * Note: Ensure appropriate environment variables and API credentials are set in .env file before enabling these tests.
+ *
+ * For Upload you will need:
+ * - your user ID,
+ * - siteID to which you want to upload BOL,
+ * - correct filePath containing one or multiple files.
+ *
+ * For Delete you will need:
+ * - siteID and userID
+ * (last test in this file deletes all 4 prevously added BOLs - adjust if needed)
+ * There is also swagger that can execute exact BOL deletion/upload
+ */
 test.describe.skip("Upload and delete BOLs", () => {
   test.use({ user: "maria" });
   test.beforeEach(async ({ page }) => {
@@ -87,7 +107,7 @@ test.describe.skip("Upload and delete BOLs", () => {
         request,
         10000307,
         bolId.trim(),
-        3226
+        3226,
       );
       expect(result.status).toBe(201);
       expect(result.body).toBe("");

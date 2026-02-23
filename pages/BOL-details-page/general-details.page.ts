@@ -86,14 +86,14 @@ export class GeneralDetails {
     this.sequence1Input = page.locator("td.mantine-Table-td > div").nth(3);
     this.input = page.locator("input.mantine-Input-input").nth(2);
     // fabricator and load container
-    this.headerContainer = page.locator("div.mantine-Group-root").nth(9);
+    this.headerContainer = page.locator("div.mantine-Group-root").nth(6);
     this.resetDateInput = page
       .locator("form")
       .getByRole("button")
       .filter({ hasText: /^$/ });
     //table items
     this.verticalDots = page.locator(
-      "span.mantine-ActionIcon-icon > svg.tabler-icon-dots-vertical"
+      "span.mantine-ActionIcon-icon > svg.tabler-icon-dots-vertical",
     );
     this.menuRowDropdown = page.locator("div.mantine-Menu-dropdown");
     this.addRowAbove = page.getByRole("menuitem", { name: "Add row above" });
@@ -136,7 +136,7 @@ export class GeneralDetails {
     this.imageContainer = page.locator("div.mantine-ScrollArea-root").first();
     //note
     this.noteContainer = page.locator(
-      'div.mantine-Stack-root[aria-haspopup="dialog"]'
+      'div.mantine-Stack-root[aria-haspopup="dialog"]',
     );
     this.noteDialog = page.locator('div[role="dialog"]');
     // elements for masking
@@ -152,10 +152,10 @@ export class GeneralDetails {
   }
   // make sure to provide exact string to this method
   async selectSite(siteName: any) {
-    await this.siteName.fill(siteName),
-      await this.page.getByRole("option", { name: `${siteName}` }).click();
+    (await this.siteName.fill(siteName),
+      await this.page.getByRole("option", { name: `${siteName}` }).click());
     await expect(
-      this.page.locator("input[value='QA Test Site']").first()
+      this.page.locator("input[value='QA Test Site']").first(),
     ).toBeVisible();
   }
 }
