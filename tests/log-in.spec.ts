@@ -33,8 +33,9 @@ test.describe("Log into BOL Validation tool", () => {
     generalDetails,
   }) => {
     await logIn.login(process.env.USERNAME, process.env.PASSWORD);
+    // currently contains screenshot with Maria.Holjevac username - update screenshot with user that will be used
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "success-log-in-msg.png"
+      "success-log-in-msg.png",
     );
   });
 
@@ -44,7 +45,7 @@ test.describe("Log into BOL Validation tool", () => {
   }) => {
     await logIn.login("maria", "test");
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "failed-log-in-msg.png"
+      "failed-log-in-msg.png",
     );
     await expect(logIn.pageTitle).not.toBeVisible();
   });

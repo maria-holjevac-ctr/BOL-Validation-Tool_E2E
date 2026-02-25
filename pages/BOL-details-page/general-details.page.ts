@@ -7,6 +7,7 @@ export class GeneralDetails {
   readonly image: Locator;
   readonly removeStatusFilter: Locator;
   readonly sortBolId: Locator;
+  readonly sortScanningTimeBtn: Locator;
   // BOL details input fields
   readonly fabricatorInput: Locator;
   readonly loadNumberInput: Locator;
@@ -68,10 +69,13 @@ export class GeneralDetails {
     this.siteName = page.getByRole("textbox", { name: "Site name" });
     this.BOLHeader = page.getByRole("heading", { name: "BOL #" });
     this.image = page.locator("img").nth(1);
-    this.removeStatusFilter = page.locator("button").nth(3);
+    this.removeStatusFilter = page.locator("button").nth(2);
     this.sortBolId = page
       .locator("div.mantine-datatable-header-cell-sortable-group")
       .first();
+    this.sortScanningTimeBtn = page
+      .locator(".mantine-datatable-header-cell-sortable")
+      .nth(3);
     // BOL details input fields
     this.fabricatorInput = page
       .locator("input.mantine-TextInput-input")

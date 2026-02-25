@@ -4,8 +4,12 @@ test.describe("Extraction Failed BOL", () => {
   test.use({ user: "maria" });
   test.beforeEach(async ({ page, generalDetails, extractionFailedBOL }) => {
     await page.goto("");
-    await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
+    await page.locator("div.mantine-PillsInput-input").click();
+    await page
+      .locator("div.multi-select-max-items-checkbox-group")
+      .first()
+      .click();
     await extractionFailedBOL.tableRow.click();
   });
 
@@ -16,10 +20,14 @@ test.describe("Extraction Failed BOL", () => {
     generalDetails,
   }) => {
     //waiting for image to load to UI
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(2000);
     await expect(generalDetails.BOLHeader).toBeVisible();
     await expect(extractionFailedBOL.page).toHaveScreenshot(
-      "extraction-failed-BOL-details.png"
+      "extraction-failed-BOL-details.png",
+      {
+        mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
+        maskColor: "#e7c742",
+      },
     );
   });
 
@@ -31,15 +39,19 @@ test.describe("Extraction Failed BOL", () => {
     await page.waitForTimeout(3000);
     await generalDetails.generateLinkBtn.click();
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "generated-link-msg.png"
+      "generated-link-msg.png",
     );
     await generalDetails.linkForApp.click();
     await expect(generalDetails.linkForAppContainer).toHaveScreenshot(
-      "link-container.png"
+      "link-container.png",
     );
     await generalDetails.closeBtn.click();
     await expect(extractionFailedBOL.page).toHaveScreenshot(
-      "extraction-failed-BOL-details.png"
+      "extraction-failed-BOL-details.png",
+      {
+        mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
+        maskColor: "#e7c742",
+      },
     );
   });
 

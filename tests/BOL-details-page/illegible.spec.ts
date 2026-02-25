@@ -18,7 +18,11 @@ test.describe("Illegible BOL details page", () => {
     await page.waitForTimeout(2000);
     await expect(generalDetails.BOLHeader).toBeVisible();
     await expect(illegibleBOL.page).toHaveScreenshot(
-      "illegible-BOL-details.png"
+      "illegible-BOL-details.png",
+      {
+        mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
+        maskColor: "#e7c742",
+      },
     );
   });
 });

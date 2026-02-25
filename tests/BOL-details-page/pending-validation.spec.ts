@@ -18,7 +18,11 @@ test.describe("Pending Validation BOL details page", () => {
     await page.waitForTimeout(2000);
     await expect(generalDetails.BOLHeader).toBeVisible();
     await expect(pendingValidationBOL.page).toHaveScreenshot(
-      "pending-validation-BOL-details.png"
+      "pending-validation-BOL-details.png",
+      {
+        mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
+        maskColor: "#e7c742",
+      },
     );
   });
 });

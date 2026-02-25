@@ -1,4 +1,6 @@
-// DEPRICATED
+// THIS LOGIC IS DEPRICATED
+// NEW LOGIC SHOULD BE IMPLEMENTED
+
 // import { test, expect } from "../../fixtures/user.fixture";
 
 // test.describe("Illegible BOL details page", () => {

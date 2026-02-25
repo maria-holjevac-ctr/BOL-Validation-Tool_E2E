@@ -17,6 +17,9 @@ test.describe("Valid BOL details page", () => {
     //waiting for image to load to UI
     await page.waitForTimeout(2000);
     await expect(generalDetails.BOLHeader).toBeVisible();
-    await expect(validBOL.page).toHaveScreenshot("valid-BOL-details.png");
+    await expect(validBOL.page).toHaveScreenshot("valid-BOL-details.png", {
+      mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
+      maskColor: "#e7c742",
+    });
   });
 });

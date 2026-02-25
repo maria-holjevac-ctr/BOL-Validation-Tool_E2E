@@ -1,10 +1,29 @@
 import { test, expect } from "../../fixtures/user.fixture";
 import { uploadDocumentImages, deleteBolDocument } from "../../util/helper";
-// also skipping, I do not want to run it each time, only specific situations (one time)
+/**
+ * This file:
+ * - Uploads a fresh BOL via API before each test (to guarantee a known starting state).
+ * - Executes various UI workflows on the latest “Pending Validation” BOL (save, mark valid/illegible, commit, edit).
+ * - (Soft) Deletes the created BOL via API after each test (cleanup to keep the UI tidy).
+ *
+ * Notes:
+ * - The entire suite is intentionally skipped via `test.describe.skip(...)` so it only runs on demand
+ *   (e.g., debugging, targeted regression), not on every test run.
+ *
+ * Test data used:
+ * - A site called “QA Test Site” that corresponds to `siteId = 10000307`.
+ * - The uploader user `uploadedBy = 3226` - change to your userID. - always use one user to avoid failing screenshots because of different username captured.
+ * - The test images exist at BOLs folder in the root of the project.
+ *
+ * Visual regression:
+ * - Multiple steps capture screenshots.
+ * - Dynamic fields (BOL ID and Last Updated date) are masked to stabilize snapshots.
+ * - Tests tend to be flaky because of snapshots - optimize the usage.
+ */
 test.describe.skip("Actions on BOLs", () => {
   test.use({ user: "maria" });
   test.beforeEach(
-    "Upload new BOL, navigate to it an make actions",
+    "Upload new BOL, navigate to it and make actions",
     async ({ request }) => {
       const result = await uploadDocumentImages({
         request,
@@ -14,15 +33,19 @@ test.describe.skip("Actions on BOLs", () => {
         note: "Automated upload of 1 BOL",
       });
       expect(result.registerStatus).toBe(201);
-    }
+    },
   );
   test.afterEach(
     "Delete BOL after test finishes",
     async ({ page, request, generalDetails }) => {
       await page.goto("");
       await generalDetails.selectSite("QA Test Site");
+      await page.waitForTimeout(1000);
       await generalDetails.removeStatusFilter.click();
-      await generalDetails.sortBolId.dblclick();
+      await page.waitForTimeout(1000);
+      await generalDetails.sortBolId.click();
+      await page.waitForTimeout(500);
+      await generalDetails.sortBolId.click();
       const bolId = await page
         .locator("td.mantine-Table-td")
         .first()
@@ -31,11 +54,11 @@ test.describe.skip("Actions on BOLs", () => {
         request,
         10000307,
         bolId.trim(),
-        3226
+        3226,
       );
       expect(result.status).toBe(201);
       expect(result.body).toBe("");
-    }
+    },
   );
   // Upload 1 BOL, find it in UI, open it, work on it - delete it (mask ID from screenshot)
   test("Saving of BOL", async ({
@@ -43,16 +66,21 @@ test.describe.skip("Actions on BOLs", () => {
     generalDetails,
     pendingValidationBOL,
   }) => {
+    // Navigate to newest BOL
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await page.waitForTimeout(1000);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
     await pendingValidationBOL.tableRow.click();
     await page.waitForTimeout(2000);
     await expect(page).toHaveScreenshot("before-save.png", {
       mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
       maskColor: "#e7c742",
     });
+    // Clear fields
     await generalDetails.fabricatorInput.fill("");
     await generalDetails.loadNumberInput.fill("");
     await generalDetails.deleteDateBtn.click();
@@ -64,7 +92,10 @@ test.describe.skip("Actions on BOLs", () => {
     await generalDetails.input.fill("");
     await generalDetails.sequence1Input.click();
     await generalDetails.input.fill("");
-
+    await expect(page).toHaveScreenshot("empty-fields.png", {
+      mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
+      maskColor: "#e7c742",
+    });
     // wait for PUT request triggered by Save btn
     const responsePromise = page.waitForResponse((response) => {
       return (
@@ -82,9 +113,13 @@ test.describe.skip("Actions on BOLs", () => {
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await page.waitForTimeout(1000);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
     await pendingValidationBOL.tableRow.click();
-    await expect(page).toHaveScreenshot("after-save.png", {
+    await page.waitForTimeout(2000);
+    await expect(page).toHaveScreenshot("empty-fields.png", {
       mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
       maskColor: "#e7c742",
     });
@@ -98,20 +133,24 @@ test.describe.skip("Actions on BOLs", () => {
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(1000);
     await pendingValidationBOL.tableRow.click();
+    await page.waitForTimeout(2000);
+    // Mark first field illegible, mark others valid
     await generalDetails.illegibleBtn.nth(0).click();
-
     for (let i = 2; i <= 12; i++) {
       await generalDetails.validBtn.nth(i).click();
     }
     await generalDetails.commitBtn.click();
     await expect(generalDetails.commitDialog).toHaveScreenshot(
-      "illegible-commit-dialog.png"
+      "illegible-commit-dialog.png",
     );
     await generalDetails.yesCommitBtn.click();
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "illegible-bol-msg.png"
+      "illegible-bol-msg.png",
     );
     await expect(page).toHaveScreenshot("illegible-BOL-status.png", {
       mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
@@ -127,8 +166,12 @@ test.describe.skip("Actions on BOLs", () => {
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await page.waitForTimeout(1000);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
     await pendingValidationBOL.tableRow.click();
+    await page.waitForTimeout(2000);
     await generalDetails.illegibleBtn.nth(0).click();
 
     for (let i = 1; i <= 11; i++) {
@@ -137,11 +180,11 @@ test.describe.skip("Actions on BOLs", () => {
     await generalDetails.illegibleBtn.nth(11).click();
     await generalDetails.commitBtn.click();
     await expect(generalDetails.commitDialog).toHaveScreenshot(
-      "illegible-commit-dialog.png"
+      "illegible-commit-dialog.png",
     );
     await generalDetails.yesCommitBtn.click();
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "illegible-bol-msg.png"
+      "illegible-bol-msg.png",
     );
     await expect(page).toHaveScreenshot("illegible-BOL-status2.png", {
       mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
@@ -157,19 +200,23 @@ test.describe.skip("Actions on BOLs", () => {
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await page.waitForTimeout(1000);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
     await pendingValidationBOL.tableRow.click();
+    await page.waitForTimeout(2000);
 
     for (let i = 1; i <= 12; i++) {
       await generalDetails.validBtn.nth(i).click();
     }
     await generalDetails.commitBtn.click();
     await expect(generalDetails.commitDialog).toHaveScreenshot(
-      "valid-commit-dialog.png"
+      "valid-commit-dialog.png",
     );
     await generalDetails.yesCommitBtn.click();
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "validated-bol-msg.png"
+      "validated-bol-msg.png",
     );
     await expect(page).toHaveScreenshot("validated-BOL-status.png", {
       mask: [generalDetails.bolID, generalDetails.lastUpdatedDate],
@@ -185,11 +232,15 @@ test.describe.skip("Actions on BOLs", () => {
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await page.waitForTimeout(1000);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
     await pendingValidationBOL.tableRow.click();
+    await page.waitForTimeout(2000);
     await generalDetails.commitBtn.click();
     await expect(generalDetails.commitDialog).toHaveScreenshot(
-      "validation-incomplete-dialog.png"
+      "validation-incomplete-dialog.png",
     );
     await generalDetails.closeBtn.click();
     await expect(page).toHaveScreenshot("status-remains-pending.png", {
@@ -206,8 +257,12 @@ test.describe.skip("Actions on BOLs", () => {
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await page.waitForTimeout(1000);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
     await pendingValidationBOL.tableRow.click();
+    await page.waitForTimeout(2000);
     await generalDetails.illegibleBtn.nth(0).click();
     for (let i = 1; i <= 11; i++) {
       await generalDetails.validBtn.nth(i).click();
@@ -239,8 +294,12 @@ test.describe.skip("Actions on BOLs", () => {
     await page.goto("");
     await generalDetails.selectSite("QA Test Site");
     await generalDetails.removeStatusFilter.click();
-    await generalDetails.sortBolId.dblclick();
+    await page.waitForTimeout(1000);
+    await generalDetails.sortBolId.click();
+    await page.waitForTimeout(500);
+    await generalDetails.sortBolId.click();
     await pendingValidationBOL.tableRow.click();
+    await page.waitForTimeout(2000);
 
     for (let i = 1; i <= 12; i++) {
       await generalDetails.validBtn.nth(i).click();

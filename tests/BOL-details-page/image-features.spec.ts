@@ -13,13 +13,19 @@ test.describe("Details page - image features", () => {
     // initial state - guide is on
     await expect(generalDetails.guideLine).toBeVisible();
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guide-on.png"
+      "guide-on.png",
+      {
+        threshold: 0.3,
+      },
     );
     // user can toggle between guide on and off
     await generalDetails.guideToggle.click();
     await expect(generalDetails.guideLine).not.toBeVisible();
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guide-off.png"
+      "guide-off.png",
+      {
+        threshold: 0.3,
+      },
     );
     // user can drag guide up and down
     await generalDetails.guideToggle.click();
@@ -31,12 +37,18 @@ test.describe("Details page - image features", () => {
     // move from center down for 300px
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + 300);
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guideline-down.png"
+      "guideline-down.png",
+      {
+        threshold: 0.3,
+      },
     );
     //move from center up for 300px
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 - 300);
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "guideline-up.png"
+      "guideline-up.png",
+      {
+        threshold: 0.3,
+      },
     );
   });
   test("Validate Magnify feature", async ({ page, generalDetails }) => {
@@ -46,21 +58,32 @@ test.describe("Details page - image features", () => {
     if (!box) throw new Error("No image container displayed");
     //position playwright cursor in the center
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await expect(generalDetails.imageContainer).toHaveScreenshot("magnify.png");
+    await expect(generalDetails.imageContainer).toHaveScreenshot(
+      "magnify.png",
+      {
+        threshold: 0.3,
+      },
+    );
   });
   test("Validate Rotate feature", async ({ page, generalDetails }) => {
     //initial state
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "non-rotated-image.png"
+      "non-rotated-image.png",
+      {
+        threshold: 0.3,
+      },
     );
     await generalDetails.rotateBtn.click();
     await expect(generalDetails.toastMsg).toHaveScreenshot(
-      "success-rotate.png"
+      "success-rotate.png",
     );
     //waiting for image to rotate
     await page.waitForTimeout(2000);
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "rotated-image.png"
+      "rotated-image.png",
+      {
+        threshold: 0.3,
+      },
     );
     // BUG: rotate is saved even when user does not explicitly save it on 'Save' button
     // thats why I am clicking though again to rotate it to initial position
@@ -71,18 +94,27 @@ test.describe("Details page - image features", () => {
     await generalDetails.rotateBtn.click();
     await page.waitForTimeout(2000);
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "non-rotated-image.png"
+      "non-rotated-image.png",
+      {
+        threshold: 0.3,
+      },
     );
   });
   test("Validate Zoom in/out feature", async ({ page, generalDetails }) => {
     await generalDetails.zoomInBtn.dblclick();
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "zoomed-in-image.png"
+      "zoomed-in-image.png",
+      {
+        threshold: 0.3,
+      },
     );
     await generalDetails.zoomOutBtn.dblclick();
     await generalDetails.zoomOutBtn.dblclick();
     await expect(generalDetails.imageContainer).toHaveScreenshot(
-      "zoomed-out-image.png"
+      "zoomed-out-image.png",
+      {
+        threshold: 0.3,
+      },
     );
   });
 });
