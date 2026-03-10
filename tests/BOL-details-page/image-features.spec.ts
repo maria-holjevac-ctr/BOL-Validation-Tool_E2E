@@ -1,4 +1,5 @@
 import { test, expect } from "../../fixtures/user.fixture";
+import { resetImageOrientation } from "../../util/ui-helper";
 
 test.describe("Details page - image features", () => {
   test.use({ user: "maria" });
@@ -10,6 +11,8 @@ test.describe("Details page - image features", () => {
   });
 
   test("Validate Guide feature", async ({ page, generalDetails }) => {
+    // Reset image orientation to the default (upright) position
+    await resetImageOrientation(page, generalDetails);
     // initial state - guide is on
     await expect(generalDetails.guideLine).toBeVisible();
     await expect(generalDetails.imageContainer).toHaveScreenshot(
@@ -52,6 +55,8 @@ test.describe("Details page - image features", () => {
     );
   });
   test("Validate Magnify feature", async ({ page, generalDetails }) => {
+    // Reset image orientation to the default (upright) position 
+    await resetImageOrientation(page, generalDetails);
     await generalDetails.magnifyBtn.click();
     // access coordinates of image container
     const box = await generalDetails.imageContainer.boundingBox();
@@ -66,6 +71,8 @@ test.describe("Details page - image features", () => {
     );
   });
   test("Validate Rotate feature", async ({ page, generalDetails }) => {
+    // Reset image orientation to the default (upright) position 
+    await resetImageOrientation(page, generalDetails);
     //initial state
     await expect(generalDetails.imageContainer).toHaveScreenshot(
       "non-rotated-image.png",
@@ -86,13 +93,8 @@ test.describe("Details page - image features", () => {
       },
     );
     // BUG: rotate is saved even when user does not explicitly save it on 'Save' button
-    // thats why I am clicking though again to rotate it to initial position
-    await generalDetails.rotateBtn.click();
-    await page.waitForTimeout(2000);
-    await generalDetails.rotateBtn.click();
-    await page.waitForTimeout(2000);
-    await generalDetails.rotateBtn.click();
-    await page.waitForTimeout(2000);
+    // that's why we need to reset the orientation it to initial position
+    await resetImageOrientation(page, generalDetails);
     await expect(generalDetails.imageContainer).toHaveScreenshot(
       "non-rotated-image.png",
       {
@@ -101,6 +103,9 @@ test.describe("Details page - image features", () => {
     );
   });
   test("Validate Zoom in/out feature", async ({ page, generalDetails }) => {
+    // Reset image orientation to the default (upright) position 
+    await resetImageOrientation(page, generalDetails);
+    //initial state
     await generalDetails.zoomInBtn.dblclick();
     await expect(generalDetails.imageContainer).toHaveScreenshot(
       "zoomed-in-image.png",
