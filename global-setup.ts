@@ -4,8 +4,8 @@ import fs from "fs/promises";
 const users = [
   {
     name: "Maria",
-    username: process.env.USERNAME!,
-    pass: process.env.PASSWORD!,
+    username: process.env.APP_USERNAME!,
+    pass: process.env.APP_PASSWORD!,
   },
 ];
 
@@ -21,7 +21,10 @@ async function globalSetup(_config: FullConfig) {
     await page.getByRole("textbox", { name: "Username" }).fill(u.username);
     await page.getByRole("textbox", { name: "Password" }).fill(u.pass);
     await page.getByRole("button", { name: "Sign in" }).click();
-    console.log(`Successful log in of user: ${u.name}`);
+    console.log(`Clicked login in for user: ${u.name}`);
+    // Debug helper for troubleshooting login issues
+    //await page.screenshot({ path: "debug-global-setup-login.png", fullPage: true });
+
     await expect(
       page.getByRole("heading", { name: "BOL Documents" })
     ).toBeVisible({
