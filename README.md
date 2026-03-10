@@ -32,7 +32,7 @@ Before running the tests, ensure your `.env` file is properly configured with va
 
 - When you will first time run the tests, make sure your user credentials are saved in a JSON file via Global setup.
 - While actively running the suite, you can comment out line 36 in file playwright.config.ts (global setup project) so we don't run log in each time we run tests.
-- When tokens expire, you can uncommnet that part again, run tests to log in the user and save the storage state, and comment it out again.
+- When tokens expire, you can uncomment that part again, run tests to log in the user and save the storage state, and comment it out again.
 - Make sure you don't commit to repository the config file with line 36 being commented out as it can fails tests and create confusion for the future.
 
 - **Headless mode (default):**

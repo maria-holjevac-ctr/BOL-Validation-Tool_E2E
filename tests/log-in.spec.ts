@@ -32,7 +32,7 @@ test.describe("Log into BOL Validation tool", () => {
     logIn,
     generalDetails,
   }) => {
-    await logIn.login(process.env.USERNAME, process.env.PASSWORD);
+    await logIn.login(process.env.APP_USERNAME, process.env.APP_PASSWORD);
     // currently contains screenshot with Maria.Holjevac username - update screenshot with user that will be used
     await expect(generalDetails.toastMsg).toHaveScreenshot(
       "success-log-in-msg.png",
